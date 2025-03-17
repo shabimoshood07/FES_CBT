@@ -7,11 +7,33 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxtjs/tailwindcss',
     '@primevue/nuxt-module',
+    '@nuxtjs/supabase',
     '@vee-validate/nuxt',
+    '@pinia/nuxt',
   ],
+  plugins: ['~/plugins/primevue-toastservice.ts'],
+  //PrimeVue
   primevue: {
     options: {
       theme: 'none',
+    },
+  },
+  supabase: {
+    redirect: false,
+    url: process.env.SUPABASE_URL,
+    key: process.env.SUPABASE_KEY,
+    useSsrCookies: true,
+    redirectOptions: {
+      login: '/login',
+      callback: '/auth/lecturer/confirm',
+      include: undefined,
+      exclude: ['/', '/auth/lecturer/sign-up', '/auth/lecturer/sign-in'],
+      saveRedirectToCookie: false,
+    },
+  },
+  runtimeConfig: {
+    public: {
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
     },
   },
 });

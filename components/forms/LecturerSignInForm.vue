@@ -26,6 +26,7 @@
         type="submit"
         label="Sign In"
         class="w-full"
+        :loading="isLoading"
       />
     </form>
     <p class="text-right pt-10">
@@ -43,12 +44,66 @@ import { useForm } from 'vee-validate';
 import FormTextInput from '../common/FormTextInput.vue';
 import FormPasswordInput from '../common/FormPasswordInput.vue';
 import { LecturerSignInSchema } from '~/schemas/schemas';
+import { useToast } from 'primevue/usetoast';
 
+//Toast
+const toast = useToast();
+
+//Supabse client
+const supabase = useSupabaseClient();
+//Router
+const router = useRouter();
+
+//Refs
+const isLoading = ref(false);
+// UseForm
 const { handleSubmit } = useForm({
   validationSchema: LecturerSignInSchema,
 });
 
-const onSubmit = handleSubmit((values) => {
-  alert(JSON.stringify(values, null, 2));
+// Handle submit
+const onSubmit = handleSubmit(async (values) => {
+  // const { error } = await supabase.auth.signInWithOtp({
+  //   email: values.email,
+  //   options: {
+  //     emailRedirectTo: `${
+  //       useRuntimeConfig().public.siteUrl
+  //     }/auth/lecturer/confirm`,
+  //     shouldCreateUser: false,
+  //   },
+  // });
+  
+  try {
+    isLoading.value = true;
+    const { error } = await supabase.auth.signInWithPassword({
+      email: values.email,
+      password: values.password,
+    });
+
+    if (error) {
+      return toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.message,
+        life: 3000,
+      });
+    }
+    toast.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Login successful',
+      life: 3000,
+    });
+    router.replace('/lecturer/profile');
+  } catch (error) {
+    return toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: error.message,
+      life: 3000,
+    });
+  } finally {
+    isLoading.value = false;
+  }
 });
 </script>

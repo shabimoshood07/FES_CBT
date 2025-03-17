@@ -16,7 +16,7 @@
       :placeholder="placeholder"
       toggle-mask
       :feedback="feedback"
-      fluid="true"
+      :fluid="true"
       :invalid="!!errorMessage"
     />
     <p

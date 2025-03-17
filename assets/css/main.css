@@ -21,6 +21,12 @@
   .form-con {
     @apply rounded-md p-4 md:p-6 bg-Primary_Variation;
   }
+  .router-link-active {
+    @apply bg-Primary_Variation !text-Dark_Text;
+  }
+  .home-btn {
+    @apply w-full text-lg text-center bg-secondary py-2 rounded-md text-primary hover:bg-primary hover:text-secondary transition-all duration-300 hover:border border-secondary;
+  }
 }
 :root {
   --p-primary-50: #ecfdf5;

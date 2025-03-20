@@ -6,6 +6,10 @@
       <CreateCourseModal />
       <ModalsCreateQuizModal />
     </div>
+    <!-- Course list table -->
+    <section>
+      <LecturerCourseListTable />
+    </section>
   </div>
 </template>
 <script setup>

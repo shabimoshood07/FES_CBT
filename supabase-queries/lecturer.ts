@@ -82,3 +82,11 @@ export const getNumberOfQuizzes = async () => {
   }
   return { success: true, count };
 };
+export const getQuizzes = async () => {
+  const supabase = useSupabaseClient<Database>();
+  const { error, data } = await supabase.from('quiz').select(`*, course(*)`);
+  if (error) {
+    return { error: true, message: error.message };
+  }
+  return { success: true, data };
+};

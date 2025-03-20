@@ -21,6 +21,7 @@
     "@tailwindcss/vite": "^4.0.14",
     "@vee-validate/nuxt": "^4.15.0",
     "@vee-validate/zod": "^4.15.0",
+    "date-fns": "^4.1.0",
     "eslint": "^9.22.0",
     "nuxt": "^3.16.0",
     "pinia": "^3.0.1",

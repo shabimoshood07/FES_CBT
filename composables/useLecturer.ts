@@ -3,6 +3,7 @@ import {
   getLecturerDetails,
   getNumberOfCourses,
   getNumberOfQuizzes,
+  getQuizzes,
 } from '~/supabase-queries/lecturer';
 
 export const useGetLecturerDetails = ({ user_id }: { user_id: string }) => {
@@ -115,6 +116,44 @@ export const useGetCourses = () => {
 
   return {
     courses,
+    error,
+    refresh,
+    status,
+    execute,
+  };
+};
+export const useGetQuizzes = () => {
+  const {
+    data: quizzes,
+    error,
+    refresh,
+    status,
+    execute,
+  } = useAsyncData(
+    'lecturer-quizzes',
+    async () => {
+      const response = await getQuizzes();
+      if (response.error) {
+        throw new Error(response.message);
+      }
+      return response.data;
+    },
+    {
+      server: false,
+      transform: (data) => {
+        return data?.map((quiz) => {
+          return {
+            ...quiz,
+            status:
+              new Date(quiz.date).getTime() > Date.now() ? 'upcoming' : 'due',
+          };
+        });
+      },
+    }
+  );
+
+  return {
+    quizzes,
     error,
     refresh,
     status,

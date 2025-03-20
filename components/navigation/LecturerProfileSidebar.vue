@@ -49,6 +49,10 @@ import { useSidebarStore } from '~/store/navigation';
 import { handleLogout } from '~/supabase-queries/auth';
 
 const { toggleSidebar } = useSidebarStore();
+const route = useRoute();
+console.log("route", route.fullPath);
+console.log("route.", route.matched);
+console.log("route.", route.path);
 
 const { isSidebarVisible } = storeToRefs(useSidebarStore());
 </script>

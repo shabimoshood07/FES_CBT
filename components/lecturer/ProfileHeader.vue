@@ -104,7 +104,7 @@ const data = reactive([
     title: 'Quizzes',
     description: 'Total Quizzes',
     icon: PrimeIcons.DESKTOP,
-    href: '/',
+    href: '/lecturer/quiz',
     status: quizStatus.value,
   },
   {

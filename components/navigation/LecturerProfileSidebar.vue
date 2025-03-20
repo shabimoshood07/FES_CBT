@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed top-0 w-screen h-screen md:sticky z-10 md:w-72 bg-secondary flex flex-col justify-between transition-all duration-500"
+    class="fixed top-0 w-screen h-screen md:sticky z-10 md:w-60 bg-secondary flex flex-col justify-between transition-all duration-500"
     :class="[
       { '-left-full': !isSidebarVisible },
       { 'left-0': isSidebarVisible },
@@ -20,23 +20,25 @@
         >
           <nuxt-link
             :to="link.href"
-            class="w-full p-2 capitalize text-base tracking-wide font-semibold rounded-md text-primary hover:bg-primary hover:text-secondary transition-all duration-500 flex gap-4"
+            class="w-full p-2 capitalize text-base tracking-wide font-semibold rounded-md text-primary hover:bg-primary hover:text-secondary transition-all duration-500 flex gap-2"
           >
             <i
               :class="link.icon"
-              class="text-xl"
+              class="text-lg"
             />
             <span>
               {{ link.lable }}
             </span>
           </nuxt-link>
-          <!-- <Divider /> -->
         </li>
       </ul>
+      <Divider />
     </nav>
     <Button
       label="Logout"
-      class="bg-Error border-transparent text-Light_Text rounded-none hover:border-transparent hover:!bg-Error"
+      class="bg-Error border-transparent text-Light_Text rounded-none hover:border-transparent hover:!bg-Error hover:!outline-0 hover:border-none border-none !outline-none"
+      icon="pi pi-sign-out"
+      aria-label="Logout"
       @click="handleLogout"
     />
   </div>

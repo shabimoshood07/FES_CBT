@@ -3,7 +3,9 @@
     <LecturerProfileSidebar />
     <div class="flex-1">
       <LecturerTopNav />
-      <slot />
+      <div class="p-4 md:p-6 lg:p-8">
+        <slot />
+      </div>
     </div>
   </main>
 </template>

@@ -13,19 +13,15 @@
             <h1 class="text-2xl font-semibold text-[#520000]">
               Quiz Information
             </h1>
-            <!-- Delete Quiz Modal -->
             <DeleteConfirmDialog
               accept-label="Delete"
               reject-label="Cancel"
-              button-label="Delete quiz"
               header="Delete quiz"
               message="Are you sure you want to delete this quiz?"
-              :success-message="message ?? ''"
-              :loading="deleteStatus === 'pending'"
-              :delete-fn="deleteQuiz"
-              :content-id="quiz.id"
+              button-label="Delete quiz"
+              :on-confirm="() => deleteQuiz(Number(quiz_id))"
+              @confirm-success="handleDeleteSuccess"
             />
-            <!-- @accept="() => execute()" -->
           </div>
         </section>
 
@@ -54,7 +50,14 @@
                 <i class="pi pi-calendar-plus text-2xl text-secondary" />
                 <div>
                   <p class="text-sm text-Dark_Text">Date</p>
-                  <p class="font-semibold">{{ quiz.date }}</p>
+                  <p class="font-semibold">
+                    {{
+                      format(
+                        parse(quiz.date, 'yyyy-MM-dd', new Date()),
+                        'do MMMM yyyy'
+                      )
+                    }}
+                  </p>
                 </div>
               </div>
 
@@ -65,6 +68,11 @@
                   <p class="font-semibold">{{ quiz.course.level }}</p>
                 </div>
               </div>
+              <Badge
+                :value="quiz.status === 'due' ? 'Due' : 'Upcoming'"
+                :severity="quiz.status === 'due' ? 'danger' : 'success'"
+                class="min-w-[100px] text-base"
+              />
             </div>
 
             <div class="space-y-4">
@@ -125,6 +133,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import { format, parse } from 'date-fns';
 import BackBtn from '~/components/common/BackBtn.vue';
 import ContentNotFound from '~/components/common/ContentNotFound.vue';
 import DeleteConfirmDialog from '~/components/common/DeleteConfirmDialog.vue';
@@ -139,13 +148,7 @@ definePageMeta({
 });
 
 const { quiz, status, error } = useGetQuiz(Number(quiz_id));
-console.log('error', error.value);
-console.log('quiz', quiz.value);
-
-const {
-  error: deleteError,
-  execute,
-  message,
-  status: deleteStatus,
-} = useDeleteQuiz(Number(quiz_id));
+const handleDeleteSuccess = () => {
+  navigateTo('/lecturer/quiz');
+};
 </script>

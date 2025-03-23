@@ -19,6 +19,8 @@
               button-label="Delete course"
               header="Delete course"
               message="Are you sure you want to delete this course?"
+              :on-confirm="() => deleteCourse(Number(course.id))"
+              @confirm-success="handleDeleteSuccess"
             />
           </div>
         </section>
@@ -79,14 +81,6 @@
             :level="course.level"
             :programs="course.programs"
           />
-          <!-- <CreateQuizModal
-            :number-of-questions="quiz.number_of_questions"
-            :course="quiz.course.id"
-            :duration="quiz.duration"
-            :title="quiz.title"
-            :date="new Date(quiz.date)"
-            :is-edit="true"
-          /> -->
         </div>
         <!-- Course Not Found -->
         <ContentNotFound
@@ -104,6 +98,7 @@ import ContentNotFound from '~/components/common/ContentNotFound.vue';
 import DeleteConfirmDialog from '~/components/common/DeleteConfirmDialog.vue';
 import PageLoader from '~/components/common/PageLoader.vue';
 import CreateCourseModal from '~/components/modals/CreateCourseModal.vue';
+import { deleteCourse } from '~/supabase-queries/lecturer';
 
 definePageMeta({
   layout: 'lecturer-profile',
@@ -111,4 +106,7 @@ definePageMeta({
 const route = useRoute();
 const course_id = route.params.id;
 const { course, status, error } = useGetCourse(Number(course_id));
+const handleDeleteSuccess = () => {
+  navigateTo('/lecturer/profile');
+};
 </script>

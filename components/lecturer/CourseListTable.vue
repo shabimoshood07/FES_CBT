@@ -57,7 +57,7 @@
                 v-for="program in slotProps.data.programs"
                 :key="program.id"
                 :value="programs.find((prog)=>prog.value === program).name"
-                class="text-secondary font-medium"
+                class="text-secondary font-semibold "
               />
             </div>
           </template>
@@ -73,24 +73,7 @@
                   <i class="pi pi-external-link" />
                 </NuxtLink>
               </Button>
-              <DeleteAlertPopup>
-                <template #default="{ confirm }">
-                  <Button
-                    icon="pi pi-trash"
-                    class="bg-transparent p-0 text-Error border-transparent h-fit w-fit hover:!bg-transparent hover:!border-transparent hover:text-Error"
-                    @click="
-                      (event) =>
-                        confirm(
-                          event,
-                          `Do you want to delete this course? ${slotProps.data.id}`,
-                          'Delete',
-                          'Cancel',
-                          onDelete
-                        )
-                    "
-                  />
-                </template>
-              </DeleteAlertPopup>
+              
             </div>
           </template>
         </Column>
@@ -100,7 +83,6 @@
 </template>
 <script setup>
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
-import DeleteAlertPopup from '../common/DeleteAlertPopup.vue';
 
 const filters = ref();
 const initFilters = () => {
@@ -116,8 +98,4 @@ const initFilters = () => {
 initFilters();
 const { courses, status } = useGetCourses();
 
-//Handle delete
-const onDelete = async () => {
-  console.log('Delete course');
-};
 </script>

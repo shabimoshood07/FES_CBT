@@ -70,10 +70,10 @@ export const createQuizSchema = z.object({
   }),
   date: z
     .date({
-      required_error: 'Quiz date is required',
+      required_error: 'Quiz date is required 1',
       invalid_type_error: 'Quiz date is required',
-    })
-    .transform((val) => val.toISOString()),
+    }),
+    // .transform((val) => val.toISOString()),
   title: z
     .string({ required_error: 'Quiz title is required' })
     .min(1, 'Quiz title is required'),

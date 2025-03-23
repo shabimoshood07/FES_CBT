@@ -60,7 +60,11 @@ import { createCourseFormSchema } from '~/schemas/schemas';
 import FormTextInput from '~/components/common/FormTextInput.vue';
 import FormTextareaInput from '../common/FormTextareaInput.vue';
 import FormSelectMultipleDepartment from '../common/FormSelectMultipleDepartment.vue';
-import { createCourse } from '~/supabase-queries/lecturer';
+import {
+  createCourse,
+  updateCourse,
+  type CreateCourseArgs,
+} from '~/supabase-queries/lecturer';
 import FormSelectLevel from '../common/FormSelectLevel.vue';
 
 //Props
@@ -96,6 +100,8 @@ const user = useSupabaseUser();
 // Ref
 const visible = ref(false);
 const isLoading = ref(false);
+const route = useRoute();
+const course_id = route.params.id;
 
 // UseForm
 const { handleSubmit, resetForm } = useForm({
@@ -120,6 +126,13 @@ watch(visible, (newVal) => {
 
 // Handle submit
 const onSubmit = handleSubmit(async (values) => {
+  if (props.isEdit) {
+    await handleUpdate(values);
+  } else {
+    await handleCreate(values);
+  }
+});
+const handleCreate = async (values: CreateCourseArgs) => {
   try {
     isLoading.value = true;
     const response = await createCourse({
@@ -156,5 +169,40 @@ const onSubmit = handleSubmit(async (values) => {
   } finally {
     isLoading.value = false;
   }
-});
+};
+const handleUpdate = async (values: CreateCourseArgs) => {
+  try {
+    isLoading.value = true;
+    const response = await updateCourse({
+      args: { ...values },
+      course_id: Number(course_id),
+    });
+    if (response.error) {
+      return toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: response.message,
+        life: 5000,
+      });
+    }
+    toast.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: response.message,
+      life: 5000,
+    });
+    resetForm();
+    visible.value = false;
+    await useGetCourse(Number(course_id)).execute();
+  } catch (error) {
+    return toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: error,
+      life: 5000,
+    });
+  } finally {
+    isLoading.value = false;
+  }
+};
 </script>

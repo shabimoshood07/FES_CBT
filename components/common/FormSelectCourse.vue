@@ -7,6 +7,7 @@
       Select course
     </label>
     <Select
+      v-if="courses"
       v-model="value"
       :options="courses"
       filter
@@ -70,7 +71,7 @@
 
 <script setup>
 import { useField } from 'vee-validate';
-const { courses, refresh, error, execute, status } = useGetCourses();
+const { courses, refresh, error, status } = useGetCourses();
 const props = defineProps({
   name: {
     type: String,
@@ -83,7 +84,7 @@ const props = defineProps({
 });
 const { value, errorMessage } = useField(() => props.name);
 
-onMounted(() => {
-  execute();
-});
+// onMounted(() => {
+//   execute();
+// });
 </script>

@@ -1,1 +1,0 @@
-export { useGetLecturerDetails } from './useLecturer';

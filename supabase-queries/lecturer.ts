@@ -15,8 +15,8 @@ export const getLecturerDetails = async ({ user_id }: { user_id: string }) => {
   return { success: true, lecturer: data };
 };
 
-type CreateCourseArgs = z.infer<typeof createCourseSchema>;
-type CreateQuizArgs = z.infer<typeof createQuizSchema>;
+export type CreateCourseArgs = z.infer<typeof createCourseSchema>;
+export type CreateQuizArgs = z.infer<typeof createQuizSchema>;
 
 /****
  COURSE
@@ -38,6 +38,23 @@ export const createCourse = async ({
   }
   return { success: true, message: 'course created successfully' };
 };
+export const updateCourse = async ({
+  course_id,
+  args,
+}: {
+  course_id: number;
+  args: CreateCourseArgs;
+}) => {
+  const supabase = useSupabaseClient<Database>();
+  const { error } = await supabase
+    .from('course')
+    .update({ ...args })
+    .eq('id', course_id);
+  if (error) {
+    return { error: true, message: error.message };
+  }
+  return { success: true, message: 'course updated successfully' };
+};
 export const createQuiz = async ({
   user_id,
   arg,
@@ -48,7 +65,7 @@ export const createQuiz = async ({
   const supabase = useSupabaseClient<Database>();
   const { error } = await supabase
     .from('quiz')
-    .insert({ ...arg, lecturer: user_id });
+    .insert({ ...arg, lecturer: user_id, date: arg.date.toDateString() });
   if (error) {
     return { error: true, message: error.message };
   }
@@ -61,6 +78,14 @@ export const getCourses = async () => {
     return { error: true, message: error.message };
   }
   return { success: true, data };
+};
+export const deleteCourse = async (course_id: number) => {
+  const supabase = useSupabaseClient<Database>();
+  const { error } = await supabase.from('course').delete().eq('id', course_id);
+  if (error) {
+    return { error: true, message: error.message };
+  }
+  return { success: true, message: 'Course deleted successfully' };
 };
 export const getNumberOfCourses = async () => {
   const supabase = useSupabaseClient<Database>();
@@ -104,16 +129,28 @@ export const getQuiz = async (quiz_id: number) => {
 };
 export const deleteQuiz = async (quiz_id: number) => {
   const supabase = useSupabaseClient<Database>();
-  await new Promise<void>((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 10000);
-  });
   const { error } = await supabase.from('quiz').delete().eq('id', quiz_id);
   if (error) {
     return { error: true, message: error.message };
   }
-  return { success: true, message: 'Quiz deleted successfully G' };
+  return { success: true, message: 'Quiz deleted successfully' };
+};
+export const updateQuiz = async ({
+  quiz_id,
+  args,
+}: {
+  quiz_id: number;
+  args: CreateQuizArgs;
+}) => {
+  const supabase = useSupabaseClient<Database>();
+  const { error } = await supabase
+    .from('quiz')
+    .update({ ...args, date: args.date.toDateString() })
+    .eq('id', quiz_id);
+  if (error) {
+    return { error: true, message: error.message };
+  }
+  return { success: true, message: 'Quiz updated successfully' };
 };
 export const getCourse = async (course_id: number) => {
   const supabase = useSupabaseClient<Database>();

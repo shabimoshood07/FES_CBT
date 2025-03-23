@@ -1,6 +1,8 @@
 <template>
-  <div class="w-full border-b border-secondary sticky top-0">
-    <nav class="flex justify-between items-center bg-primary p-4">
+  <div
+    class="w-full border-b border-secondary sticky top-0 z-20 backdrop-blur-md"
+  >
+    <nav class="flex justify-between items-center p-4 w-full">
       <div>
         <h1
           v-if="lecturerData"

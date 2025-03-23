@@ -41,6 +41,7 @@ export type Database = {
           created_at: string
           id: number
           lecturer: string
+          level: string
           programs: string[]
         }
         Insert: {
@@ -49,6 +50,7 @@ export type Database = {
           created_at?: string
           id?: number
           lecturer?: string
+          level: string
           programs: string[]
         }
         Update: {
@@ -57,6 +59,7 @@ export type Database = {
           created_at?: string
           id?: number
           lecturer?: string
+          level?: string
           programs?: string[]
         }
         Relationships: []

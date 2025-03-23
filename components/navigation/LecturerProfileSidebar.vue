@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed top-0 w-screen h-screen md:sticky z-10 md:w-60 bg-secondary flex flex-col justify-between transition-all duration-500"
+    class="fixed top-0 w-screen h-screen md:sticky z-30 md:w-[250px] md:left-0 bg-secondary flex flex-col justify-between transition-all duration-500 shrink-0"
     :class="[
       { '-left-full': !isSidebarVisible },
       { 'left-0': isSidebarVisible },

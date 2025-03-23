@@ -1,8 +1,11 @@
 import {
+  deleteQuiz,
+  getCourse,
   getCourses,
   getLecturerDetails,
   getNumberOfCourses,
   getNumberOfQuizzes,
+  getQuiz,
   getQuizzes,
 } from '~/supabase-queries/lecturer';
 
@@ -154,6 +157,102 @@ export const useGetQuizzes = () => {
 
   return {
     quizzes,
+    error,
+    refresh,
+    status,
+    execute,
+  };
+};
+export const useDeleteQuiz = (quiz_id: number) => {
+  const {
+    error,
+    refresh,
+    status,
+    execute,
+    data: message,
+  } = useAsyncData(
+    `delete-${quiz_id}`,
+    async () => {
+      const response = await deleteQuiz(quiz_id);
+      if (response.error) {
+        throw new Error(response.message);
+      }
+      return response.message;
+    },
+    {
+      server: false,
+      immediate: false,
+    }
+  );
+
+  return {
+    message,
+    error,
+    refresh,
+    status,
+    execute,
+  };
+};
+export const useGetQuiz = (quiz_id: number) => {
+  const {
+    data: quiz,
+    error,
+    refresh,
+    status,
+    execute,
+  } = useAsyncData(
+    `quiz-${quiz_id}`,
+    async () => {
+      const response = await getQuiz(quiz_id);
+      if (response.error) {
+        throw new Error(response.message);
+      }
+      return response.data;
+    },
+    {
+      server: false,
+      transform: (data) => {
+        if (!data) return null;
+        return {
+          ...data,
+          status:
+            new Date(data.date).getTime() > Date.now() ? 'upcoming' : 'due',
+        };
+      },
+    }
+  );
+
+  return {
+    quiz,
+    error,
+    refresh,
+    status,
+    execute,
+  };
+};
+export const useGetCourse = (course_id: number) => {
+  const {
+    data: course,
+    error,
+    refresh,
+    status,
+    execute,
+  } = useAsyncData(
+    `course-${course_id}`,
+    async () => {
+      const response = await getCourse(course_id);
+      if (response.error) {
+        throw new Error(response.message);
+      }
+      return response.data;
+    },
+    {
+      server: false,
+    }
+  );
+
+  return {
+    course,
     error,
     refresh,
     status,

@@ -1,17 +1,19 @@
 <template>
-  <div class="">
+  <div>
     <Button
-      label="Create course"
+      :label="isEdit ? 'Edit Course' : 'Create Course'"
       class="capitalize"
       @click="visible = true"
     />
     <Dialog
       v-model:visible="visible"
       modal
-      header="Create course"
+      :header="isEdit ? 'Edit Course' : 'Create Course'"
       class="w-11/12 mx-auto md:max-w-2xl"
     >
-      <span class="text-surface-500 dark:text-surface-400 block mb-8"
+      <span
+        v-if="!isEdit"
+        class="text-surface-500 dark:text-surface-400 block mb-8"
         >Create an assigned course</span
       >
       <form
@@ -31,7 +33,7 @@
           name="programs"
           label="Departments"
         />
-
+        <FormSelectLevel name="level" />
         <div class="flex justify-end gap-2">
           <Button
             type="button"
@@ -42,7 +44,7 @@
           />
           <Button
             type="submit"
-            label="Submit"
+            :label="isEdit ? 'Update' : 'Submit'"
             :loading="isLoading"
           />
         </div>
@@ -59,6 +61,32 @@ import FormTextInput from '~/components/common/FormTextInput.vue';
 import FormTextareaInput from '../common/FormTextareaInput.vue';
 import FormSelectMultipleDepartment from '../common/FormSelectMultipleDepartment.vue';
 import { createCourse } from '~/supabase-queries/lecturer';
+import FormSelectLevel from '../common/FormSelectLevel.vue';
+
+//Props
+const props = defineProps({
+  isEdit: {
+    type: Boolean,
+    default: false,
+  },
+  courseCode: {
+    type: Number,
+    default: null,
+  },
+  courseTitle: {
+    type: String,
+    default: null,
+  },
+  level: {
+    type: String,
+    default: null,
+  },
+  programs: {
+    type: Array as () => string[],
+    default: () => [],
+  },
+});
+
 //Toast
 const toast = useToast();
 
@@ -72,6 +100,22 @@ const isLoading = ref(false);
 // UseForm
 const { handleSubmit, resetForm } = useForm({
   validationSchema: createCourseFormSchema,
+});
+
+// Watch the 'visible' property to reset form values when the modal is opened
+watch(visible, (newVal) => {
+  if (newVal && props.isEdit) {
+    resetForm({
+      values: {
+        course_code: String(props.courseCode),
+        course_title: String(props.courseTitle),
+        level: String(props.level),
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        programs: props.programs as string[],
+      },
+    });
+  }
 });
 
 // Handle submit
@@ -98,7 +142,10 @@ const onSubmit = handleSubmit(async (values) => {
     });
     resetForm();
     visible.value = false;
-    await useGetCourseCount().execute();
+    await Promise.all([
+      useGetCourseCount().execute(),
+      useGetCourses().execute(),
+    ]);
   } catch (error) {
     return toast.add({
       severity: 'error',

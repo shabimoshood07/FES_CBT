@@ -90,3 +90,40 @@ export const getQuizzes = async () => {
   }
   return { success: true, data };
 };
+export const getQuiz = async (quiz_id: number) => {
+  const supabase = useSupabaseClient<Database>();
+  const { error, data } = await supabase
+    .from('quiz')
+    .select(`*, course(*)`)
+    .eq('id', quiz_id)
+    .single();
+  if (error) {
+    return { error: true, message: error.message };
+  }
+  return { success: true, data };
+};
+export const deleteQuiz = async (quiz_id: number) => {
+  const supabase = useSupabaseClient<Database>();
+  await new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 10000);
+  });
+  const { error } = await supabase.from('quiz').delete().eq('id', quiz_id);
+  if (error) {
+    return { error: true, message: error.message };
+  }
+  return { success: true, message: 'Quiz deleted successfully G' };
+};
+export const getCourse = async (course_id: number) => {
+  const supabase = useSupabaseClient<Database>();
+  const { error, data } = await supabase
+    .from('course')
+    .select(`*`)
+    .eq('id', course_id)
+    .single();
+  if (error) {
+    return { error: true, message: error.message };
+  }
+  return { success: true, data };
+};

@@ -1,7 +1,7 @@
 <template>
-  <main class="min-h-screen flex">
+  <main class="md:min-h-screen flex">
     <LecturerProfileSidebar />
-    <div class="flex-1">
+    <div class="flex-1 relative md:overflow-hidden">
       <LecturerTopNav />
       <div class="p-4 md:p-6 lg:p-8">
         <slot />

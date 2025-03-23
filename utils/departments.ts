@@ -50,8 +50,31 @@ export const programs = [
   },
   {
     id: 6,
-    name: 'Quantity Survey',
+    name: 'Quantity Surveying',
     value: 'qts',
     department: 'Building and Quantity Survey',
+  },
+];
+
+export const levels = [
+  {
+    label: '100 Level',
+    value: '100',
+  },
+  {
+    label: '200 Level',
+    value: '200',
+  },
+  {
+    label: '300 Level',
+    value: '300',
+  },
+  {
+    label: '400 Level',
+    value: '400',
+  },
+  {
+    label: '500 Level',
+    value: '500',
   },
 ];

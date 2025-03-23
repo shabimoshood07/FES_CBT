@@ -1,17 +1,19 @@
 <template>
   <div class="">
     <Button
-      label="Create Quiz"
+      :label="isEdit ? 'Edit Quiz' : 'Create Quiz'"
       class="capitalize"
       @click="visible = true"
     />
     <Dialog
       v-model:visible="visible"
       modal
-      header="Create quiz"
+      :header="isEdit ? 'Edit Quiz' : 'Create Quiz'"
       class="w-11/12 mx-auto md:max-w-2xl"
     >
-      <span class="text-surface-500 dark:text-surface-400 block mb-8"
+      <span
+        v-if="!isEdit"
+        class="text-surface-500 dark:text-surface-400 block mb-8"
         >Create a quiz</span
       >
       <form
@@ -22,20 +24,20 @@
           name="title"
           label="Quiz title"
         />
-        <CommonFormDatePicker
+        <FormDatePicker
           name="date"
           label="Quiz date"
           date-format="dd/mm/yy"
         />
-        <CommonFormNumberInput
+        <FormNumberInput
           name="number_of_questions"
           label="Number of questions"
         />
-        <CommonFormNumberInput
+        <FormNumberInput
           name="duration"
           label="Quiz duration (seconds)"
         />
-        <CommonFormSelectCourse name="course" />
+        <FormSelectCourse name="course" />
         <div class="flex justify-end gap-2">
           <Button
             type="button"
@@ -46,7 +48,7 @@
           />
           <Button
             type="submit"
-            label="Submit"
+            :label="isEdit ? 'Update' : 'Submit'"
             :loading="isLoading"
           />
         </div>
@@ -56,11 +58,43 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useForm } from 'vee-validate';
 import { createQuizFormSchema } from '~/schemas/schemas';
 import FormTextInput from '~/components/common/FormTextInput.vue';
 import { createQuiz } from '~/supabase-queries/lecturer';
+import FormSelectCourse from '../common/FormSelectCourse.vue';
+import FormDatePicker from '../common/FormDatePicker.vue';
+import FormNumberInput from '../common/FormNumberInput.vue';
+
+//Props
+const props = defineProps({
+  isEdit: {
+    type: Boolean,
+    default: false,
+  },
+  course: {
+    type: Number,
+    default: null,
+  },
+  numberOfQuestions: {
+    type: Number,
+    default: null,
+  },
+  duration: {
+    type: Number,
+    default: null,
+  },
+  title: {
+    type: String,
+    default: null,
+  },
+  date: {
+    type: Date,
+    default: null,
+  },
+});
+
 //Toast
 const toast = useToast();
 
@@ -76,38 +110,59 @@ const { handleSubmit, resetForm } = useForm({
   validationSchema: createQuizFormSchema,
 });
 
+// Watch the 'visible' property to reset form values when the modal is opened
+watch(visible, (newVal) => {
+  if (newVal && props.isEdit) {
+    resetForm({
+      values: {
+        course: Number(props.course),
+        number_of_questions: Number(props.numberOfQuestions),
+        date: props.date ? new Date(props.date as Date) : undefined,
+        duration: Number(props.duration),
+        title: String(props.title),
+      },
+    });
+  }
+});
+
 // Handle submit
 const onSubmit = handleSubmit(async (values) => {
   console.log('values', values);
 
   try {
     isLoading.value = true;
-    const response = await createQuiz({
+
+    const { error, message } = await createQuiz({
       arg: { ...values },
       user_id: user.value!.id,
     });
-    if (response.error) {
-      return toast.add({
+
+    if (error) {
+      toast.add({
         severity: 'error',
         summary: 'Error',
-        detail: response.message,
+        detail: message,
         life: 5000,
       });
+      return;
     }
+
     toast.add({
       severity: 'success',
       summary: 'Success',
-      detail: response.message,
+      detail: message,
       life: 5000,
     });
+
     resetForm();
     visible.value = false;
-    await useGetQuizCount().execute();
+
+    await Promise.all([useGetQuizCount().execute(), useGetQuizzes().execute()]);
   } catch (error) {
-    return toast.add({
+    toast.add({
       severity: 'error',
       summary: 'Error',
-      detail: error,
+      detail: error instanceof Error ? error.message : String(error),
       life: 5000,
     });
   } finally {

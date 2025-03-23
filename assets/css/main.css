@@ -27,6 +27,9 @@
   .home-btn {
     @apply w-full text-lg text-center bg-secondary py-2 rounded-md text-primary hover:bg-primary hover:text-secondary transition-all duration-300 hover:border border-secondary;
   }
+  .section-heading {
+    @apply text-base md:text-2xl text-secondary font-semibold;
+  }
 }
 :root {
   --p-primary-50: #ecfdf5;

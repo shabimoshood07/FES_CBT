@@ -8,11 +8,12 @@
     </div>
     <!-- Course list table -->
     <section>
-      <LecturerCourseListTable />
+      <CourseListTable />
     </section>
   </div>
 </template>
 <script setup>
+import CourseListTable from '~/components/lecturer/CourseListTable.vue';
 import ProfileHeader from '~/components/lecturer/ProfileHeader.vue';
 import CreateCourseModal from '~/components/modals/CreateCourseModal.vue';
 

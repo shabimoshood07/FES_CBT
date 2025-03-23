@@ -49,6 +49,7 @@ export const createCourseSchema = z.object({
   course_title: z
     .string({ required_error: 'Course title is required' })
     .min(1, 'Course title is required'),
+  level: z.string({ required_error: 'Select level' }).min(1, 'Select level'),
   programs: z
     .array(z.string({ required_error: 'Select at least one program' }))
     .nonempty({ message: 'Select at least one program' })

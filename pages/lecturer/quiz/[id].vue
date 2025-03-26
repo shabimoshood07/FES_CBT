@@ -2,7 +2,7 @@
   <div class="m-h-screen">
     <PageLoader v-if="status === 'pending'" />
 
-    <div class="min-h-screen">
+    <div>
       <div>
         <section class="mb-8 space-y-10">
           <BackBtn />
@@ -10,7 +10,7 @@
             v-if="quiz"
             class="flex justify-between items-center mb-4 flex-wrap gap-6"
           >
-            <h1 class="text-2xl font-semibold text-[#520000]">
+            <h1 class="section-heading">
               Quiz Information
             </h1>
             <DeleteConfirmDialog
@@ -29,7 +29,7 @@
           v-if="quiz"
           class="bg-white rounded-xl shadow-lg p-6 mb-8"
         >
-          <h2 class="text-3xl font-bold text-[#520000] mb-4">
+          <h2 class="text-base md:text-xl font-bold text-[#520000] mb-4">
             {{ quiz.title }}
           </h2>
           <!-- Quiz Info -->
@@ -130,6 +130,9 @@
         error-message="Quiz not found !!"
       />
     </div>
+
+    <!--Quiz question uploader  -->
+    <QuizQuestionUploader />
   </div>
 </template>
 <script setup lang="ts">
@@ -140,14 +143,21 @@ import DeleteConfirmDialog from '~/components/common/DeleteConfirmDialog.vue';
 import PageLoader from '~/components/common/PageLoader.vue';
 import CreateQuizModal from '~/components/modals/CreateQuizModal.vue';
 import { deleteQuiz } from '~/supabase-queries/lecturer';
+import QuizQuestionUploader from '~/components/common/QuizQuestionUploader.vue';
 
-const route = useRoute();
-const quiz_id = route.params.id;
+// Page Metadata
 definePageMeta({
   layout: 'lecturer-profile',
 });
 
+// Route
+const route = useRoute();
+// Quiz ID
+const quiz_id = route.params.id;
+
+// Hooks
 const { quiz, status, error } = useGetQuiz(Number(quiz_id));
+
 const handleDeleteSuccess = () => {
   navigateTo('/lecturer/quiz');
 };

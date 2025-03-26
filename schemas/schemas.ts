@@ -68,14 +68,30 @@ export const createQuizSchema = z.object({
     required_error: 'Duration of quiz in seconds is required',
     invalid_type_error: 'Duration of quiz in seconds is required',
   }),
-  date: z
-    .date({
-      required_error: 'Quiz date is required 1',
-      invalid_type_error: 'Quiz date is required',
-    }),
-    // .transform((val) => val.toISOString()),
+  date: z.date({
+    required_error: 'Quiz date is required 1',
+    invalid_type_error: 'Quiz date is required',
+  }),
+  // .transform((val) => val.toISOString()),
   title: z
     .string({ required_error: 'Quiz title is required' })
     .min(1, 'Quiz title is required'),
 });
 export const createQuizFormSchema = toTypedSchema(createQuizSchema);
+export const EditQuestionInSchema = toTypedSchema(
+  z.object({
+    answer: z.union([
+      z.string({ required_error: 'Answer is required' }).min(1, 'Answer is required'),
+      z.boolean(),
+    ]),
+    question: z
+      .string({ required_error: 'Question is required' })
+      .min(1, 'Question is required'),
+    answers: z.array(
+      z.object({
+        label: z.string(),
+        value: z.union([z.string(), z.boolean()]),
+      })
+    ),
+  })
+);

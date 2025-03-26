@@ -1,6 +1,7 @@
 <template>
   <div class="flex flex-col gap-2">
     <label
+      v-if="props.label"
       :for="props.name"
       class="form-label"
     >
@@ -13,6 +14,7 @@
         'p-invalid': errorMessage,
       }"
       :placeholder="placeholder"
+      fluid
     />
     <p
       v-if="errorMessage"
@@ -31,7 +33,8 @@ const props = defineProps({
   },
   label: {
     type: String,
-    required: true,
+    required: false,
+    default: null,
   },
   placeholder: {
     type: String,

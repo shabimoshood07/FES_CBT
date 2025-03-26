@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <Button
-      :label="isEdit ? 'Edit Quiz' : 'Create Quiz'"
+      :label="isEdit ? 'Edit Quiz Info' : 'Create Quiz'"
       class="capitalize"
       @click="visible = true"
     />
@@ -222,6 +222,4 @@ const handleUpdate = async (values: CreateQuizArgs) => {
     isLoading.value = false;
   }
 };
-
-console.log('date', props.date);
 </script>

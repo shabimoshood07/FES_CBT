@@ -1,7 +1,7 @@
 type QuestionType = 'multi_choice' | 'true_false';
 
 interface MultiChoiceQuestionType {
-  id: string;
+  id: string | number;
   question_type: 'multi_choice';
   question: string;
   A: string;
@@ -12,7 +12,7 @@ interface MultiChoiceQuestionType {
 }
 
 interface TrueFalseQuestionType {
-  id: string;
+  id: string | number;
   question_type: 'true_false';
   question: string;
   answer: boolean;

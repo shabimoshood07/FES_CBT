@@ -30,6 +30,21 @@
   .section-heading {
     @apply text-base md:text-2xl text-secondary font-semibold;
   }
+  .qstn-label {
+    @apply border-2 text-base uppercase rounded-md py-1.5 px-3 border-secondary font-bold;
+  }
+  .qstn-label-text {
+    @apply bg-transparent text-secondary;
+  }
+  .qstn-label-text-selected {
+    @apply bg-green-400 text-Light_Text;
+  }
+  .qstn-question {
+    @apply text-base lg:text-lg;
+  }
+  .option-label {
+    @apply text-base;
+  }
 }
 :root {
   --p-primary-50: #ecfdf5;

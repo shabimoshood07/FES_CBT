@@ -3,6 +3,7 @@
     <label
       :for="props.name"
       class="form-label"
+      v-if="label"
     >
       {{ label }}
     </label>
@@ -33,7 +34,8 @@ const props = defineProps({
   },
   label: {
     type: String,
-    required: true,
+    required: false,
+    default: null,
   },
   placeholder: {
     type: String,

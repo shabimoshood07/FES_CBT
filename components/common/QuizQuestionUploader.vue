@@ -2,6 +2,7 @@
   <section class="space-y-10">
     <div class="w-full">
       <FileUpload
+        ref="fileUploader"
         mode="advanced"
         name="quiz-file"
         accept=".xlsx, .xls, .xlsm"
@@ -50,13 +51,17 @@
       </FileUpload>
     </div>
     <!-- Populated questions conatiner -->
-    <PopulatedQuizQuestions :populated-questions="populatedQuestions" />
+    <PopulatedQuizQuestions @remove-file="removeFile" />
   </section>
 </template>
 <script setup lang="ts">
 import { useQuizUploadStore } from '~/store/quiz-upload';
 import PopulatedQuizQuestions from './PopulatedQuizQuestions.vue';
 
+// Ref
+const fileUploader = ref();
+
+const removeFile = () => fileUploader.value.clear();
 // Store
 const { populatedQuestions } = storeToRefs(useQuizUploadStore());
 const { handleClear, handleFileSelect } = useQuizUploadStore();

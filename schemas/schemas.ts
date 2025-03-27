@@ -89,8 +89,8 @@ export const EditQuestionInSchema = toTypedSchema(
       .min(1, 'Question is required'),
     answers: z.array(
       z.object({
-        label: z.string(),
-        value: z.union([z.string(), z.boolean()]),
+        label: z.string().min(1, "Label is required"),
+        value: z.union([z.string().min(1, "Value is required"), z.boolean()]),
       })
     ),
   })

@@ -11,10 +11,10 @@
     }"
   >
     <template #content>
-      <p class="m-0">
+      <p class="qstn-question">
         {{ question.question }}
       </p>
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-5">
         <div
           v-for="option in options"
           :key="option.label"
@@ -22,19 +22,27 @@
         >
           <RadioButton
             v-model="answer"
-            :input-id="option.label"
-            name="dynamic"
+            :input-id="question.id + '' + 'display'"
+            :name="'answer' + '' + question.id"
             :value="option.label"
             class="hidden"
             disabled
           />
           <label
-            :for="option.label"
-            class="border text-base uppercase rounded-md py-1.5 px-3 border-secondary font-bold text-secondary"
-            :class="answer === option.label ? 'bg-green-400' : 'bg-transparent'"
+            :for="question.id + '' + 'display'"
+            class="qstn-label"
+            :class="
+              answer === option.label
+                ? 'qstn-label-text-selected'
+                : 'qstn-label-text'
+            "
             >{{ option.label }}</label
           >
-          <label :for="option.label">{{ option.value }}</label>
+          <label
+            :for="question.id + '' + 'display'"
+            class="option-label"
+            >{{ option.value }}</label
+          >
         </div>
       </div>
     </template>
@@ -62,7 +70,7 @@ import type { PropType } from 'vue';
 import type { MultiChoiceQuestionType } from '~/types';
 
 const emit = defineEmits<{
-  delete: [id: string];
+  delete: [id: string | number];
   edit: [question: MultiChoiceQuestionType];
 }>();
 
@@ -76,8 +84,9 @@ const props = defineProps({
 const handleDelete = () => emit('delete', props.question.id);
 const handleEdit = () => emit('edit', props.question);
 
-const answer = ref(props.question.answer);
-const options = reactive([
+const answer = computed(() => props.question.answer);
+
+const options = computed(() => [
   { value: props.question.A, label: 'A' },
   { value: props.question.B, label: 'B' },
   { value: props.question.C, label: 'C' },

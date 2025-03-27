@@ -103,6 +103,53 @@ export type Database = {
         }
         Relationships: []
       }
+      question: {
+        Row: {
+          A: string | null
+          answer: Database["public"]["Enums"]["answer_enum"]
+          B: string | null
+          C: string | null
+          created_at: string
+          D: string | null
+          id: number
+          question: string
+          question_type: Database["public"]["Enums"]["question_type_enum"]
+          quiz: number
+        }
+        Insert: {
+          A?: string | null
+          answer: Database["public"]["Enums"]["answer_enum"]
+          B?: string | null
+          C?: string | null
+          created_at?: string
+          D?: string | null
+          id?: number
+          question: string
+          question_type: Database["public"]["Enums"]["question_type_enum"]
+          quiz: number
+        }
+        Update: {
+          A?: string | null
+          answer?: Database["public"]["Enums"]["answer_enum"]
+          B?: string | null
+          C?: string | null
+          created_at?: string
+          D?: string | null
+          id?: number
+          question?: string
+          question_type?: Database["public"]["Enums"]["question_type_enum"]
+          quiz?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_quiz_fkey1"
+            columns: ["quiz"]
+            isOneToOne: false
+            referencedRelation: "quiz"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       quiz: {
         Row: {
           course: number
@@ -152,7 +199,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      answer_enum: "A" | "B" | "C" | "D" | "true" | "false"
       department: "bqs" | "aid" | "sgi" | "urp"
+      question_type_enum: "multi_choice" | "true_false"
       role: "lecturer" | "admin" | "super_admin"
     }
     CompositeTypes: {

@@ -10,6 +10,7 @@
       modal
       :header="isEdit ? 'Edit Quiz' : 'Create Quiz'"
       class="w-11/12 mx-auto md:max-w-2xl"
+      :closable="false"
     >
       <span
         v-if="!isEdit"

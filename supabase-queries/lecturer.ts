@@ -164,3 +164,62 @@ export const getCourse = async (course_id: number) => {
   }
   return { success: true, data };
 };
+
+// Question
+export type UploadQuestionArgs =
+  Database['public']['Tables']['question']['Insert'];
+export const uploadQuestion = async (args: UploadQuestionArgs[]) => {
+  const supabase = useSupabaseClient<Database>();
+  const { error } = await supabase.from('question').insert(args);
+  if (error) {
+    return { error: true, message: error.message };
+  }
+  return { success: true, message: 'Questions uploaded successfully' };
+};
+export const getQuestions = async (quiz_id: number) => {
+  const supabase = useSupabaseClient<Database>();
+
+  const { data, error } = await supabase
+    .from('question')
+    .select('*')
+    .eq('quiz', quiz_id)
+    .order('id', {
+      ascending: true,
+    });
+  if (error) {
+    return { error: true, message: error.message };
+  }
+  return { success: true, data };
+};
+export type UpdateQuestionArgs =
+  Database['public']['Tables']['question']['Update'];
+export const updateQuestion = async ({
+  question_id,
+  args,
+}: {
+  question_id: number;
+  args: UpdateQuestionArgs;
+}) => {
+  const supabase = useSupabaseClient<Database>();
+
+  const { error } = await supabase
+    .from('question')
+    .update({ ...args })
+    .eq('id', question_id);
+  if (error) {
+    return { error: true, message: error.message };
+  }
+  return { success: true, message: 'Question updated successfully' };
+};
+export const deleteQuestion = async (question_id: number) => {
+  const supabase = useSupabaseClient<Database>();
+
+  const { error } = await supabase
+    .from('question')
+    .delete()
+    .eq('id', question_id);
+  if (error) {
+    return { error: true, message: error.message };
+  }
+  return { success: true, message: 'Question deleted successfully' };
+};

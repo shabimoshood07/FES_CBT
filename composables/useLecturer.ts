@@ -5,6 +5,7 @@ import {
   getLecturerDetails,
   getNumberOfCourses,
   getNumberOfQuizzes,
+  getQuestions,
   getQuiz,
   getQuizzes,
 } from '~/supabase-queries/lecturer';
@@ -253,6 +254,37 @@ export const useGetCourse = (course_id: number) => {
 
   return {
     course,
+    error,
+    refresh,
+    status,
+    execute,
+  };
+};
+
+// Quiz Questions
+export const useGetQuestions = (quiz_id: number) => {
+  const {
+    data: questions,
+    error,
+    refresh,
+    status,
+    execute,
+  } = useAsyncData(
+    `quiz-questions-${quiz_id}`,
+    async () => {
+      const response = await getQuestions(quiz_id);
+      if (response.error) {
+        throw new Error(response.message);
+      }
+      return response.data;
+    },
+    {
+      server: false,
+    }
+  );
+
+  return {
+    questions,
     error,
     refresh,
     status,

@@ -11,6 +11,7 @@
       modal
       :header="header"
       :style="{ width: '25rem' }"
+      :closable="false"
     >
       <span class="text-surface-500 dark:text-surface-400 block mb-8">{{
         message
@@ -86,10 +87,11 @@ const handleDelete = async () => {
     visible.value = false;
     emit('confirm-success');
   } catch (error) {
+    console.log('Error [Delete dialog]', error);
     toast.add({
       severity: 'error',
       summary: 'Error',
-      detail: error.message || 'An unexpected error occurred.',
+      detail: 'An unexpected error occurred.',
       life: 5000,
     });
   } finally {

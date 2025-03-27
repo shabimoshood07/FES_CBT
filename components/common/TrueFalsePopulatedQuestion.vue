@@ -5,13 +5,13 @@
       body: {
         class: 'justify-between h-full',
       },
-      content:{
-        class:'space-y-6'
-      }
+      content: {
+        class: 'space-y-6',
+      },
     }"
   >
     <template #content>
-      <p class="m-0">
+      <p class="qstn-question">
         {{ question.question }}
       </p>
       <div class="flex flex-col gap-4">
@@ -22,16 +22,20 @@
         >
           <RadioButton
             v-model="answer"
-            :input-id="option.label"
-            name="dynamic"
+            :input-id="option.label + question.id"
+            :name="String(question.id)"
             :value="option.label"
             class="hidden"
             disabled
           />
           <label
-            :for="option.label"
-            class="border text-base uppercase rounded-md py-2 px-4 border-secondary font-semibold text-secondary"
-            :class="answer === option.value ? 'bg-green-400' : 'bg-transparent'"
+            :for="option.label + question.id"
+            class="qstn-label"
+            :class="
+              answer === option.value
+                ? 'qstn-label-text-selected '
+                : ' qstn-label-text'
+            "
             >{{ option.label }}</label
           >
         </div>
@@ -60,7 +64,7 @@ import type { PropType } from 'vue';
 import type { TrueFalseQuestionType } from '~/types';
 
 const emit = defineEmits<{
-  delete: [id: string];
+  delete: [id: string | number];
   edit: [question: TrueFalseQuestionType];
 }>();
 
@@ -74,8 +78,8 @@ const props = defineProps({
 const handleDelete = () => emit('delete', props.question.id);
 const handleEdit = () => emit('edit', props.question);
 
-const answer = ref(props.question.answer);
-const options = reactive([
+const answer = computed(() => props.question.answer);
+const options = computed(() => [
   { value: true, label: 'True' },
   { value: false, label: 'False' },
 ]);

@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid';
 export const useQuizUploadStore = defineStore('quiz-upload', () => {
   const populatedQuestions = ref<PopulatedQuestionType[]>([]);
   const selectedQuestion = ref<PopulatedQuestionType | null>(null);
+  const selectedQuestionToDelete = ref<string | number | null>(null);
 
   // Handle question file select
   const handleFileSelect = async (event: FileUploadSelectEvent) => {
@@ -25,14 +26,13 @@ export const useQuizUploadStore = defineStore('quiz-upload', () => {
 
   // Handle clear
   const handleClear = () => {
-    console.log('cleared');
     populatedQuestions.value = [];
   };
 
   // Handle delete question
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: string | number) => {
     populatedQuestions.value = populatedQuestions.value.filter(
-      question => question.id !== id
+      (question) => question.id !== id
     );
   };
 
@@ -40,13 +40,26 @@ export const useQuizUploadStore = defineStore('quiz-upload', () => {
   const handleSelectForEdit = (question: PopulatedQuestionType) => {
     selectedQuestion.value = question;
   };
+  // Handle update question
+  const handleUpdate = (updated_Question: PopulatedQuestionType) => {
+    populatedQuestions.value = populatedQuestions.value.map((qst) => {
+      if (qst.id === updated_Question.id) {
+        return {
+          ...updated_Question,
+        };
+      }
+      return qst;
+    });
+  };
 
-  return { 
-    populatedQuestions, 
+  return {
+    populatedQuestions,
     selectedQuestion,
-    handleClear, 
+    handleClear,
     handleFileSelect,
     handleDelete,
-    handleSelectForEdit 
+    handleSelectForEdit,
+    handleUpdate,
+    selectedQuestionToDelete,
   };
 });

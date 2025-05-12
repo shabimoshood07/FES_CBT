@@ -128,6 +128,8 @@
 import { format, parse } from 'date-fns';
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
 import CreateQuizModal from '~/components/modals/CreateQuizModal.vue';
+
+// Page Metadata
 definePageMeta({
   layout: 'lecturer-profile',
 });

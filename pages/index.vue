@@ -2,7 +2,7 @@
   <div class="flex flex-col md:flex-row py-10 items-center gap-4">
     <Button as-child>
       <NuxtLink
-        href="/auth/lecturer/sign-in"
+        href="/auth/student"
         class="home-btn"
       >
         Take Quiz

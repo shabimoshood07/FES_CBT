@@ -1,6 +1,7 @@
 import {
   deleteQuiz,
   getCourse,
+  getCourseQuizzes,
   getCourses,
   getLecturerDetails,
   getNumberOfCourses,
@@ -126,6 +127,45 @@ export const useGetCourses = () => {
     execute,
   };
 };
+export const useGetCourseQuizzes = (course_id: number) => {
+  const {
+    data: quizzes,
+    error,
+    refresh,
+    status,
+    execute,
+  } = useAsyncData(
+    `course-quizzes-${course_id}`,
+    async () => {
+      const response = await getCourseQuizzes(course_id);
+      if (response.error) {
+        throw new Error(response.message);
+      }
+      return response.data;
+    },
+    {
+      server: false,
+      transform: (data) => {
+        return data?.map((quiz) => {
+          return {
+            ...quiz,
+            status:
+              new Date(quiz.date).getTime() > Date.now() ? 'upcoming' : 'due',
+          };
+        });
+      },
+    }
+  );
+
+  return {
+    quizzes,
+    error,
+    refresh,
+    status,
+    execute,
+  };
+};
+
 export const useGetQuizzes = () => {
   const {
     data: quizzes,

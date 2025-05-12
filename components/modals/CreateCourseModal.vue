@@ -74,7 +74,7 @@ const props = defineProps({
     default: false,
   },
   courseCode: {
-    type: Number,
+    type: String,
     default: null,
   },
   courseTitle: {

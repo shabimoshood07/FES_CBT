@@ -55,21 +55,18 @@ export const updateCourse = async ({
   }
   return { success: true, message: 'course updated successfully' };
 };
-export const createQuiz = async ({
-  user_id,
-  arg,
-}: {
-  user_id: string;
-  arg: CreateQuizArgs;
-}) => {
+
+export const getCourse = async (course_id: number) => {
   const supabase = useSupabaseClient<Database>();
-  const { error } = await supabase
-    .from('quiz')
-    .insert({ ...arg, lecturer: user_id, date: arg.date.toDateString() });
+  const { error, data } = await supabase
+    .from('course')
+    .select(`*`)
+    .eq('id', course_id)
+    .single();
   if (error) {
     return { error: true, message: error.message };
   }
-  return { success: true, message: 'quiz created successfully' };
+  return { success: true, data };
 };
 export const getCourses = async () => {
   const supabase = useSupabaseClient<Database>();
@@ -97,6 +94,35 @@ export const getNumberOfCourses = async () => {
   }
   return { success: true, count };
 };
+export const getCourseQuizzes = async (course_id: number) => {
+  const supabase = useSupabaseClient<Database>();
+  const { error, data } = await supabase
+    .from('quiz')
+    .select(`*`)
+    .eq('course', course_id);
+  if (error) {
+    return { error: true, message: error.message };
+  }
+  return { success: true, data };
+};
+// QUIZ
+export const createQuiz = async ({
+  user_id,
+  arg,
+}: {
+  user_id: string;
+  arg: CreateQuizArgs;
+}) => {
+  const supabase = useSupabaseClient<Database>();
+  const { error } = await supabase
+    .from('quiz')
+    .insert({ ...arg, lecturer: user_id, date: arg.date.toDateString() });
+  if (error) {
+    return { error: true, message: error.message };
+  }
+  return { success: true, message: 'quiz created successfully' };
+};
+
 export const getNumberOfQuizzes = async () => {
   const supabase = useSupabaseClient<Database>();
   const { count, error } = await supabase
@@ -151,18 +177,6 @@ export const updateQuiz = async ({
     return { error: true, message: error.message };
   }
   return { success: true, message: 'Quiz updated successfully' };
-};
-export const getCourse = async (course_id: number) => {
-  const supabase = useSupabaseClient<Database>();
-  const { error, data } = await supabase
-    .from('course')
-    .select(`*`)
-    .eq('id', course_id)
-    .single();
-  if (error) {
-    return { error: true, message: error.message };
-  }
-  return { success: true, data };
 };
 
 // Question
